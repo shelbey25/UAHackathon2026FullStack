@@ -1,0 +1,24 @@
+# Video files
+Site Walkthrough.mp4
+*.mp4
+*.mov
+
+# Dependencies
+node_modules/
+__pycache__/
+venv/
+.env
+.env.local
+
+# Build outputs
+.next/
+dist/
+build/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/

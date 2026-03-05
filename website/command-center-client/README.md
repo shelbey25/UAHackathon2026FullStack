@@ -1,36 +1,94 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# command-center-client
 
-## Getting Started
+Next.js web dashboard for the SentinelSupply Command Center.
 
-First, run the development server:
+## Tech Stack
+
+- Next.js 16 (App Router)
+- React 19
+- Tailwind CSS 4
+- Recharts (charts)
+- GSAP 3 (animations)
+- Clerk authentication (`@clerk/nextjs`)
+- TypeScript
+
+## Setup
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Create `.env.local`:
+```
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_...
+CLERK_SECRET_KEY=sk_test_...
+NEXT_PUBLIC_API_URL=http://localhost:4000
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Run dev server:
+```bash
+npm run dev
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Open [http://localhost:3000](http://localhost:3000).
 
-## Learn More
+## Pages
 
-To learn more about Next.js, take a look at the following resources:
+| Route | Description |
+|---|---|
+| `/` | Landing page with Clerk sign-in + tech stack presentation |
+| `/dashboard` | Main dashboard with tabs: Overview, Graph, Reports, Heroes |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Dashboard Features
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- **Overview tab** — Interactive Earth map with sector pins (color-coded by depletion risk), drill-down to per-resource detail cards
+- **Graph tab** — Inventory depletion charts (Recharts) filterable by sector, resource, and time range
+- **Reports tab** — Paginated reports table with priority/location/resource/hero/level filters, report processing, archive toggle, and report submission modal
+- **Heroes tab** — Hero assignment table with assign/unassign modals
+- **Jarvis Panel** — AI sync panel for triggering Jarvis webhook
+- **Lockdown Overlay** — Full-screen lockdown mode triggered on 403 responses
 
-## Deploy on Vercel
+## Hooks (Data Layer)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+| Hook | API Endpoint | Behavior |
+|---|---|---|
+| `useInventory` | `GET /api/inventory` | 5s polling; filtered by sector/resource/days |
+| `useReports` | `GET /api/reports` | 5s polling; paginated with priority/cleared filters |
+| `useForecast` | `GET /api/forecasting-front-end` | 5s polling; all resources with depletion rates |
+| `useHeroes` | `GET /api/hero` | Polling with exponential backoff (5s–30s); assign/unassign |
+| `useJarvisSync` | `POST /api/jarvis/sync` | On-demand; sends API key |
+| `useSyncUser` | `POST /api/users/create` | Runs once on mount; registers Clerk user |
+| `useLockdown` | — | React context; toggles lockdown overlay on 403 |
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Project Structure
+
+```
+src/
+├── app/
+│   ├── layout.tsx              # Root layout (Clerk + Lockdown providers)
+│   ├── page.tsx                # Landing / login page
+│   ├── globals.css             # Global styles
+│   └── dashboard/
+│       └── page.tsx            # Main dashboard page
+├── components/
+│   ├── AssignHeroModal.tsx     # Hero assignment form modal
+│   ├── EarthMap.tsx            # Interactive sector map with drill-down
+│   ├── HeroTable.tsx           # Hero list + status table
+│   ├── InventoryChart.tsx      # Recharts depletion chart
+│   ├── InventoryTable.tsx      # Raw inventory data table
+│   ├── JarvisPanel.tsx         # Jarvis AI sync trigger
+│   ├── LockdownOverlay.tsx     # Full-screen lockdown mode
+│   ├── ReportsTable.tsx        # Paginated reports with filters
+│   └── SubmitReportModal.tsx   # New report submission form
+├── hooks/
+│   ├── useForecast.ts
+│   ├── useHeroes.ts
+│   ├── useInventory.ts
+│   ├── useJarvisSync.ts
+│   ├── useLockdown.tsx
+│   ├── useReports.ts
+│   └── useSyncUser.ts
+├── lib/
+│   └── api.ts                  # API base URL config
+└── middleware.ts               # Clerk route protection
+```
