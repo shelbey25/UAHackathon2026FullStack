@@ -1,1 +1,0 @@
-# UAHackathon2026FullStack

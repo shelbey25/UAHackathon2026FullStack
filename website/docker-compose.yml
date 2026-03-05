@@ -1,0 +1,77 @@
+version: "3.9"
+
+services:
+  # ── PostgreSQL ────────────────────────────────────────────────────────────
+  postgres:
+    image: postgres:16-alpine
+    container_name: sentinel_pg
+    restart: unless-stopped
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: sentinelsupply
+    ports:
+      - "5432:5432"
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # ── ML Service ────────────────────────────────────────────────────────────
+  ml:
+    build:
+      context: ./command-center-ml
+      dockerfile: Dockerfile
+    container_name: sentinel_ml
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      ML_HOST: "0.0.0.0"
+      ML_PORT: "8000"
+    volumes:
+      - ./Instructions:/app/Instructions:ro
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ── API Gateway ───────────────────────────────────────────────────────────
+  api:
+    build:
+      context: ./command-center-api
+      dockerfile: Dockerfile
+    container_name: sentinel_api
+    restart: unless-stopped
+    ports:
+      - "4000:4000"
+    environment:
+      DATABASE_URL: "postgresql://postgres:postgres@postgres:5432/sentinelsupply"
+      ML_SERVICE_URL: "http://ml:8000"
+      CLIENT_ORIGIN: "http://localhost:3000"
+      PORT: "4000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      ml:
+        condition: service_healthy
+
+  # ── Next.js Client ────────────────────────────────────────────────────────
+  client:
+    build:
+      context: ./command-center-client
+      dockerfile: Dockerfile
+    container_name: sentinel_client
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      NEXT_PUBLIC_API_URL: "http://localhost:4000"
+    depends_on:
+      - api
+
+volumes:
+  pg_data:

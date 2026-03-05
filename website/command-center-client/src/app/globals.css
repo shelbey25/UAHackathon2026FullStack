@@ -1,0 +1,613 @@
+@import "tailwindcss";
+
+/* ═══════════════════════════════════════════════════════
+   S.H.I.E.L.D. COMMAND CENTER — DESIGN TOKENS  v2
+   Darker • Heavily animated • Interactive
+   ═══════════════════════════════════════════════════════ */
+:root {
+  /* ── Base surfaces (pushed darker) ─────────────── */
+  --background: #060810;
+  --foreground: #cbd5e1;
+  --surface-0: #080b12;
+  --surface-1: #0c1018;
+  --surface-2: #10151e;
+  --surface-3: #151c28;
+
+  /* ── Accent: cyan / teal holographic ───────────── */
+  --accent: #2dd4bf;
+  --accent-dim: rgba(45, 212, 191, 0.10);
+  --accent-glow: rgba(45, 212, 191, 0.05);
+  --accent-border: rgba(45, 212, 191, 0.15);
+  --accent-bright: rgba(45, 212, 191, 0.30);
+
+  /* ── Semantic ──────────────────────────────────── */
+  --border: rgba(255, 255, 255, 0.04);
+  --border-strong: rgba(255, 255, 255, 0.08);
+  --text-primary: #cbd5e1;
+  --text-secondary: #7e8fa6;
+  --text-muted: #4a5568;
+
+  /* ── Radii ─────────────────────────────────────── */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+
+  /* ── Shadows ───────────────────────────────────── */
+  --shadow-panel: 0 2px 8px rgba(0, 0, 0, 0.6), 0 0 30px rgba(45, 212, 191, 0.02);
+  --shadow-glow: 0 0 20px rgba(45, 212, 191, 0.10), 0 0 60px rgba(45, 212, 191, 0.04);
+  --shadow-glow-strong: 0 0 20px rgba(45, 212, 191, 0.18), 0 0 60px rgba(45, 212, 191, 0.08);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+/* ── Body base ───────────────────────────────────── */
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+}
+
+/* ── Subtle grid background ──────────────────────── */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  background-image:
+    linear-gradient(rgba(45, 212, 191, 0.018) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(45, 212, 191, 0.018) 1px, transparent 1px);
+  background-size: 60px 60px;
+  pointer-events: none;
+}
+
+/* ── Radial glow vignette ────────────────────────── */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background: radial-gradient(ellipse 70% 50% at 50% 0%, rgba(45, 212, 191, 0.025) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+/* ═══════════════════════════════════════════════════════
+   S.H.I.E.L.D. PANEL SYSTEM
+   ═══════════════════════════════════════════════════════ */
+.shield-panel {
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-panel);
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.35s ease, box-shadow 0.35s ease, transform 0.35s ease;
+}
+
+.shield-panel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  border: 1px solid var(--accent-border);
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  pointer-events: none;
+}
+
+.shield-panel:hover {
+  border-color: var(--accent-border);
+  box-shadow: var(--shadow-glow);
+  transform: translateY(-1px);
+}
+
+.shield-panel:hover::before {
+  opacity: 1;
+}
+
+/* Panel header strip — thin accent line at top */
+.shield-panel-header {
+  border-bottom: 1px solid var(--border);
+  padding: 0.75rem 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.shield-panel-header::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, var(--accent) 50%, transparent 100%);
+  opacity: 0.3;
+}
+
+/* ═══════════════════════════════════════════════════════
+   S.H.I.E.L.D. TITLE SYSTEM
+   ═══════════════════════════════════════════════════════ */
+.shield-title {
+  font-family: var(--font-mono), monospace;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-primary);
+}
+
+.shield-title-lg {
+  font-size: 1.25rem;
+}
+
+.shield-title-md {
+  font-size: 0.875rem;
+}
+
+.shield-title-sm {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+/* Micro-label above titles */
+.shield-micro-label {
+  font-family: var(--font-mono), monospace;
+  font-size: 0.625rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent);
+  display: block;
+  margin-bottom: 0.25rem;
+}
+
+/* ═══════════════════════════════════════════════════════
+   S.H.I.E.L.D. BUTTON SYSTEM
+   ═══════════════════════════════════════════════════════ */
+.shield-btn-primary {
+  background: linear-gradient(135deg, rgba(45, 212, 191, 0.12) 0%, rgba(45, 212, 191, 0.06) 100%);
+  border: 1px solid var(--accent-border);
+  color: var(--accent);
+  font-family: var(--font-mono), monospace;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0.5rem 1.25rem;
+  border-radius: var(--radius-sm);
+  transition: all 0.25s ease;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.shield-btn-primary::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(45, 212, 191, 0.08) 0%, transparent 60%);
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.shield-btn-primary:hover {
+  background: linear-gradient(135deg, rgba(45, 212, 191, 0.22) 0%, rgba(45, 212, 191, 0.10) 100%);
+  border-color: var(--accent-bright);
+  box-shadow: var(--shadow-glow), inset 0 0 20px rgba(45, 212, 191, 0.05);
+  transform: translateY(-1px);
+}
+
+.shield-btn-primary:hover::after {
+  opacity: 1;
+}
+
+.shield-btn-primary:active {
+  transform: translateY(0);
+  box-shadow: var(--shadow-panel);
+}
+
+/* ═══════════════════════════════════════════════════════
+   S.H.I.E.L.D. STATUS STRIP (thin horizontal divider)
+   ═══════════════════════════════════════════════════════ */
+.shield-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, var(--border-strong) 20%, var(--border-strong) 80%, transparent 100%);
+}
+
+.shield-divider-accent {
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, var(--accent-border) 30%, var(--accent-border) 70%, transparent 100%);
+}
+
+/* ═══════════════════════════════════════════════════════
+   INTERACTIVE TABLE ROWS
+   ═══════════════════════════════════════════════════════ */
+.shield-row-interactive {
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+}
+
+.shield-row-interactive:hover {
+  background-color: rgba(45, 212, 191, 0.04) !important;
+  box-shadow: inset 3px 0 0 var(--accent);
+}
+
+/* ═══════════════════════════════════════════════════════
+   TOGGLE PILL – INTERACTIVE
+   ═══════════════════════════════════════════════════════ */
+.shield-pill {
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.shield-pill::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 50%, rgba(45, 212, 191, 0.12) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.shield-pill:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.shield-pill:hover::after {
+  opacity: 1;
+}
+
+.shield-pill:active {
+  transform: translateY(0) scale(0.97);
+}
+
+.shield-pill-active {
+  box-shadow: 0 0 12px rgba(45, 212, 191, 0.12), inset 0 0 12px rgba(45, 212, 191, 0.06);
+}
+
+/* ═══════════════════════════════════════════════════════
+   ANIMATED SCAN LINE (continuous)
+   ═══════════════════════════════════════════════════════ */
+@keyframes scanDown {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100vh); }
+}
+
+.shield-scanline {
+  position: fixed;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, rgba(45, 212, 191, 0.06) 30%, rgba(45, 212, 191, 0.06) 70%, transparent 100%);
+  z-index: 0;
+  pointer-events: none;
+  animation: scanDown 8s linear infinite;
+  will-change: transform;
+}
+
+/* ═══════════════════════════════════════════════════════
+   PULSING DOT (for status indicators)
+   ═══════════════════════════════════════════════════════ */
+@keyframes shieldPulse {
+  0%, 100% { opacity: 1; box-shadow: 0 0 0 0 currentColor; }
+  50% { opacity: 0.7; box-shadow: 0 0 0 4px transparent; }
+}
+
+.shield-pulse {
+  animation: shieldPulse 2s ease-in-out infinite;
+}
+
+/* ═══════════════════════════════════════════════════════
+   TYPEWRITER MICRO-LABEL
+   ═══════════════════════════════════════════════════════ */
+@keyframes typewriterReveal {
+  from { max-width: 0; }
+  to { max-width: 30ch; }
+}
+
+@keyframes blinkCaret {
+  0%, 100% { border-color: var(--accent); }
+  50% { border-color: transparent; }
+}
+
+.shield-typewriter {
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+  border-right: 2px solid var(--accent);
+  animation: typewriterReveal 1.2s steps(20, end) forwards,
+             blinkCaret 0.7s step-end 6;
+}
+
+/* ═══════════════════════════════════════════════════════
+   CHART SEQUENTIAL FADE-IN ANIMATION
+   ═══════════════════════════════════════════════════════ */
+.shield-chart-panel { opacity: 0; }
+.shield-chart-legend { opacity: 0; }
+.shield-chart-body { opacity: 0; }
+
+@keyframes shieldFadeSlideUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes shieldFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* ═══════════════════════════════════════════════════════
+   SCROLLBAR — TACTICAL
+   ═══════════════════════════════════════════════════════ */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--surface-0);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--surface-3);
+  border-radius: 3px;
+  transition: background 0.2s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
+/* ═══════════════════════════════════════════════════════
+   SELECTION
+   ═══════════════════════════════════════════════════════ */
+::selection {
+  background: rgba(45, 212, 191, 0.20);
+  color: #fff;
+}
+
+/* ═══════════════════════════════════════════════════════
+   FOCUS RING
+   ═══════════════════════════════════════════════════════ */
+:focus-visible {
+  outline: 1px solid var(--accent-border);
+  outline-offset: 2px;
+}
+
+/* ═══════════════════════════════════════════════════════
+   EARTH MAP — GLOBE & SECTOR ANIMATIONS
+   ═══════════════════════════════════════════════════════ */
+
+/* Ambient glow behind planet */
+.earth-ambient {
+  width: 120%;
+  height: 120%;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(45, 212, 191, 0.07) 0%,
+    rgba(45, 212, 191, 0.03) 35%,
+    transparent 70%
+  );
+  animation: earthAmbientPulse 5s ease-in-out infinite;
+}
+
+@keyframes earthAmbientPulse {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.8; }
+  50%      { transform: translate(-50%, -50%) scale(1.08); opacity: 1; }
+}
+
+/* Thin orbit ring */
+.earth-orbit {
+  width: 108%;
+  height: 108%;
+  border-radius: 50%;
+  border: 1px solid rgba(45, 212, 191, 0.06);
+  animation: orbitSpin 30s linear infinite;
+}
+
+@keyframes orbitSpin {
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to   { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* Image itself: subtle continuous glow */
+.earth-img {
+  filter: drop-shadow(0 0 40px rgba(45, 212, 191, 0.06))
+          drop-shadow(0 0 80px rgba(45, 212, 191, 0.03));
+  animation: earthImgGlow 6s ease-in-out infinite;
+}
+
+@keyframes earthImgGlow {
+  0%, 100% {
+    filter: drop-shadow(0 0 40px rgba(45, 212, 191, 0.06))
+            drop-shadow(0 0 80px rgba(45, 212, 191, 0.03));
+  }
+  50% {
+    filter: drop-shadow(0 0 50px rgba(45, 212, 191, 0.10))
+            drop-shadow(0 0 100px rgba(45, 212, 191, 0.05));
+  }
+}
+
+/* Sector dot ping animation */
+.sector-ping {
+  animation: sectorPing 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+@keyframes sectorPing {
+  0%   { transform: scale(1); opacity: 0.35; }
+  75%, 100% { transform: scale(2.2); opacity: 0; }
+}
+
+/* Material card slide-in */
+.material-card {
+  animation: materialSlideIn 0.4s ease-out both;
+}
+
+@keyframes materialSlideIn {
+  from { opacity: 0; transform: translateX(-16px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+/* Earth scene container */
+.earth-scene {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ═══════════════════════════════════════════════════════
+   S.H.I.E.L.D. RANGE SLIDER
+   ═══════════════════════════════════════════════════════ */
+.shield-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--surface-3);
+  outline: none;
+  cursor: pointer;
+}
+
+.shield-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: 2px solid var(--surface-1);
+  box-shadow: 0 0 8px rgba(45, 212, 191, 0.4), 0 0 20px rgba(45, 212, 191, 0.15);
+  cursor: pointer;
+  transition: box-shadow 0.2s ease, transform 0.15s ease;
+}
+
+.shield-slider::-webkit-slider-thumb:hover {
+  box-shadow: 0 0 12px rgba(45, 212, 191, 0.6), 0 0 30px rgba(45, 212, 191, 0.25);
+  transform: scale(1.15);
+}
+
+.shield-slider::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: 2px solid var(--surface-1);
+  box-shadow: 0 0 8px rgba(45, 212, 191, 0.4), 0 0 20px rgba(45, 212, 191, 0.15);
+  cursor: pointer;
+  transition: box-shadow 0.2s ease, transform 0.15s ease;
+}
+
+.shield-slider::-moz-range-thumb:hover {
+  box-shadow: 0 0 12px rgba(45, 212, 191, 0.6), 0 0 30px rgba(45, 212, 191, 0.25);
+  transform: scale(1.15);
+}
+
+.shield-slider::-moz-range-track {
+  height: 4px;
+  border-radius: 2px;
+  background: var(--surface-3);
+}
+
+/* ═══════════════════════════════════════════════════════
+   J.A.R.V.I.S. PANEL ANIMATIONS
+   ═══════════════════════════════════════════════════════ */
+
+/* Backdrop fade in */
+.jarvis-backdrop {
+  animation: jarvisFadeIn 0.25s ease-out both;
+}
+
+/* Panel slide-in from right */
+.jarvis-panel {
+  animation: jarvisSlideIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes jarvisSlideIn {
+  from { opacity: 0; transform: translateX(40px) scale(0.96); }
+  to   { opacity: 1; transform: translateX(0) scale(1); }
+}
+
+@keyframes jarvisFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* Thinking dots bounce */
+.jarvis-think-dot {
+  animation: jarvisThinkDot 1.4s ease-in-out infinite;
+}
+
+@keyframes jarvisThinkDot {
+  0%, 80%, 100% { opacity: 0.2; transform: scale(0.8); }
+  40%           { opacity: 1; transform: scale(1.3); }
+}
+
+/* Core icon pulse */
+.jarvis-core {
+  animation: jarvisCorePulse 2s ease-in-out infinite;
+}
+
+@keyframes jarvisCorePulse {
+  0%, 100% { opacity: 0.7; filter: drop-shadow(0 0 4px rgba(45,212,191,0.3)); }
+  50%      { opacity: 1;   filter: drop-shadow(0 0 12px rgba(45,212,191,0.6)); }
+}
+
+/* Ring animations */
+.jarvis-ring-inner {
+  animation: jarvisRingPulse 2.5s ease-in-out infinite;
+}
+
+.jarvis-ring-outer {
+  animation: jarvisRingPulse 2.5s ease-in-out infinite 0.4s;
+}
+
+@keyframes jarvisRingPulse {
+  0%, 100% { transform: scale(1); opacity: 0.3; }
+  50%      { transform: scale(1.08); opacity: 0.7; }
+}
+
+/* Scan bars shimmer */
+.jarvis-scan-bar {
+  animation: jarvisScanShimmer 1.8s ease-in-out infinite;
+  opacity: 0;
+}
+
+@keyframes jarvisScanShimmer {
+  0%        { opacity: 0; transform: scaleX(0.3); }
+  50%       { opacity: 0.6; transform: scaleX(1); }
+  100%      { opacity: 0; transform: scaleX(0.3); }
+}
+
+/* Instruction card entrance */
+.jarvis-instruction {
+  animation: jarvisCardIn 0.4s ease-out both;
+}
+
+@keyframes jarvisCardIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Typing caret blink */
+.jarvis-caret {
+  animation: jarvisCaretBlink 0.6s step-end infinite;
+}
+
+@keyframes jarvisCaretBlink {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0; }
+}
+
+/* Done line fade in */
+.jarvis-done {
+  animation: jarvisFadeIn 0.5s ease-out 0.3s both;
+}

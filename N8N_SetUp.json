@@ -1,0 +1,897 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "dae8f665-69ea-4cd7-919f-969c3f16dfcf",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -272,
+        -160
+      ],
+      "id": "092b78e4-5a6d-4925-93d3-1601a6d26881",
+      "name": "Webhook",
+      "webhookId": "dae8f665-69ea-4cd7-919f-969c3f16dfcf"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.body.text }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "You will be given a message from the field and your role is to analyze it and turn it into usable JSON data.\n\nIdentify the resource that is mentioned in the message.\nResources should be one of the following: \"Arc Reactor Cores\", \"Clean Water (L)\", \"Medical Kits\", \"Pym Particles\", \"Vibranium (kg)\"\nIf the resource is not one of the following or is misspelled infer which one it is. If it is completely different or unmentioned return \"Misc\".\n\nIdentify the location that is mentioned in the message.\nLocations should be one of the following: \"Wakanda\", \"Avengers Compound\", \"New Asgard\", \"Sanctum Sanctorum\", \"Sokovia\"\nIf the resource is not one of the following or is misspelled infer which one it is. If it is completely different or unmentioned return \"Uncharted\".\n\nIdentify the resource status as only one of the following: \"NONE\", \"CRITICAL\", \"LOW\", \"MODERATE\", \"SUFFICIENT\", \"SURPLUS\"\n\nHere are some details on the resource status to help you classify:\n\nNONE \nDefinition: No resources available; completely depleted.\nExample: \"Vibranium reserves fully depleted in Wakanda. Zero medical kits remaining.\"\n\nCRITICAL\nDefinition: Near-zero supply; immediate resupply required.\nExample: \"Down to last 2 arc reactors. Sector 7 has almost no ammunition left.\"\n\nLOW \nDefinition: Below operational threshold; requires attention soon.\nExample: \"Medical supplies running low in New Asgard. Estimate 3 days before depletion.\"\n\nMODERATE\nDefinition: Adequate for current operations but not fully stocked.\nExample: \"Quinjet fuel at 45%. Enough for 2 more sorties.\"\n\nSUFFICIENT \nDefinition: Well-stocked; no immediate concern.\nExample: \"Full resupply received. All sectors at operational capacity.\"\n\nSURPLUS \nDefinition: Excess inventory available; redistribution possible.\nExample: \"Stark Industries shipment arrived. We have more nano-tech than we can store.\"\n\nYou should return your answers in the following JSON format:\n{\n\t\"resource_name\": \"<resource name>\",\n\t\"location\": \"<location name>\",\n        \"status\": \"<status>\"\n}"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        32,
+        -160
+      ],
+      "id": "a6f6fe94-e007-4cf0-aed5-cce405eedc1a",
+      "name": "AI Agent",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-5-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-5-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        -32,
+        48
+      ],
+      "id": "7a5722e0-227a-4119-96b0-5db6a14b2808",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "9CzYhKzvmIRgzApT",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n\t\"resource_name\": \"Pym Particles\",\n\t\"location\": \"Wakanda\",\n    \"status\": \"NONE\"\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        176,
+        48
+      ],
+      "id": "c1e219d6-ed45-4e75-be71-ba7d2c7bcd07",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\n  \"resource_name\": {{ $json.output.resource_name.toJsonString() }},\n\"location\": {{ $json.output.location.toJsonString() }},\n\"status\": {{ $json.output.status.toJsonString() }}\n} ",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        384,
+        -160
+      ],
+      "id": "8db0933d-2aac-4e28-8af2-d97564d2904f",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {}
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -272,
+        208
+      ],
+      "id": "401df5de-dc0e-4553-82a2-d46bc7e0eb7a",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "23bdf1a0-40d2-4265-b654-0032deabb66a",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -272,
+        416
+      ],
+      "id": "363a1ef2-7816-4777-8ceb-79d4ef537935",
+      "name": "Webhook1",
+      "webhookId": "23bdf1a0-40d2-4265-b654-0032deabb66a"
+    },
+    {
+      "parameters": {
+        "url": "https://fullstackuainnovatebackend-production.up.railway.app/api/forecast/get-all-resources-tracked",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "x-api-key",
+              "value": "0d0eec5ad3d2a58b7fbc5947614fc20c54d6a082dad3650e1a112af11ed87f97"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        32,
+        320
+      ],
+      "id": "5e8c04cf-8e0a-46b6-b58a-2f3e0907be1d",
+      "name": "HTTP Request1"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://fullstackuainnovatebackend-production.up.railway.app/api/forecast",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "x-api-key",
+              "value": "0d0eec5ad3d2a58b7fbc5947614fc20c54d6a082dad3650e1a112af11ed87f97"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "sector",
+              "value": "={{ $json.location }}"
+            },
+            {
+              "name": "resource",
+              "value": "={{ $json.resource }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        512,
+        336
+      ],
+      "id": "5b759818-2a30-44a2-8188-32d80d9315d4",
+      "name": "HTTP Request2"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        288,
+        320
+      ],
+      "id": "f6ac046f-3626-4a66-8e57-0ac55f5415f3",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "fc603698-f5be-41bf-be8b-1d5aa9cc8957",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -272,
+        -496
+      ],
+      "id": "3718a3c8-dad3-4e36-9f57-82510c68049b",
+      "name": "Jarvis Report",
+      "webhookId": "fc603698-f5be-41bf-be8b-1d5aa9cc8957"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.body.toJsonString() }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "You are an AI coordinator at SHIELD Command. Your role is to delegate agents to resource stabilization missions across global locations.\n\nYou will be provided with:\n\nA list of agents and whether they are currently assigned.\n\nIf assigned: the agent’s current resource and location.\n\nA list of locations with:\n\ncurrent stock levels\n\ndepletion rates (units per hour)\n\npredicted depletion time\n\nMISSION OBJECTIVE:\n\nEnsure that no location runs out of resources. Recommend targeted deployments that stabilize critical resources while avoiding overcommitting agents to any single location.\n\nOPERATIONAL RULES:\n\nEach assigned agent replenishes resources at +100 units per hour.\n\nMinimum assignment duration is 1 hour.\n\nSuggested durations must be integers ≥ 1 hour.\n\nDo not assign agents longer than necessary if doing so risks other locations.\n\nPrioritize locations with the lowest time-to-depletion.\n\nOnly reassign agents when necessary.\n\nIf an agent is currently unassigned, treat their current assignment as N/A.\n\nCRITICAL OVERRIDE RULE:\n\nIf all agents are currently busy AND a resource will reach zero before any agent becomes available, you may recommend interrupting an existing assignment early. Use this only as a last resort.\n\nOUTPUT REQUIREMENTS (STRICT):\n\nReturn ONLY valid JSON.\n\nDo NOT include markdown.\n\nDo NOT include commentary outside the JSON.\n\nOutput MUST contain only the instructions field.\n\nBe concise but strategic.\n\nDo NOT invent agents, locations, or resources.\n\nREQUIRED INSTRUCTION STYLE:\n\nIn the instructions field, explicitly state deployments using this exact phrasing pattern for each recommendation:\n\n\"You should deploy agent-id to [LOCATION] to stabilize [RESOURCE] for [HOURS] hours.\"\n\nIf no changes are needed, return:\n\n\"No reassignment required at this time.\"\n\nJSON SCHEMA:\n\n{\n\"instructions\": \"string\"\n}\n\nVALIDATION RULES:\n\nHours must be positive integers.\n\nPrefer the minimal effective assignment duration.\n\nEnsure recommendations prevent depletion whenever possible."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        0,
+        -496
+      ],
+      "id": "9c64d4c0-1077-44d9-b10e-046b34504cb7",
+      "name": "AI Agent1",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-5.1",
+          "mode": "list",
+          "cachedResultName": "gpt-5.1"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        -48,
+        -304
+      ],
+      "id": "d1fd560e-8916-42dc-aaa9-c1311be9eb4b",
+      "name": "OpenAI Chat Model1",
+      "credentials": {
+        "openAiApi": {
+          "id": "9CzYhKzvmIRgzApT",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n  \"instructions\": \"High-level strategic summary of assignments.\"\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        176,
+        -304
+      ],
+      "id": "c983e95b-ba43-4c65-aab3-0a7ba4e082c1",
+      "name": "Structured Output Parser1"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json.output.toJsonString() }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        352,
+        -496
+      ],
+      "id": "6c60fd6b-168e-4c57-92b4-8df0104cbfbd",
+      "name": "Respond to Webhook1"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -272,
+        592
+      ],
+      "id": "e74cacd3-0e4e-4939-bfc5-e919e613e547",
+      "name": "Schedule Trigger1"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://fullstackuainnovatebackend-production.up.railway.app/api/simulate/tick",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "x-api-key",
+              "value": "=0d0eec5ad3d2a58b7fbc5947614fc20c54d6a082dad3650e1a112af11ed87f97"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        -64,
+        592
+      ],
+      "id": "f9b77021-6b4a-4ae9-962b-41b8e5f867ed",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "content": "## Generates predictions by analyzing trend of recent resource data to predict resource loss rate (nightly or on trigger)",
+        "height": 192,
+        "width": 352
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        704,
+        272
+      ],
+      "id": "b647d03a-6215-417a-b745-8f7859523870",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "## Update live resource stock data hourly",
+        "height": 192,
+        "width": 352
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        192,
+        576
+      ],
+      "id": "988ef4b0-8830-4b69-ae95-89a33b02d975",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "## Turns anonymized reports into readable JSON",
+        "height": 192,
+        "width": 352
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        608,
+        -208
+      ],
+      "id": "832fde7e-c724-43dc-b458-793c3145f739",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "## Generates actionable JARVIS report based on hero and resource live status ",
+        "height": 192,
+        "width": 352
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        576,
+        -528
+      ],
+      "id": "72e8c16d-62fe-4a37-8e55-d509f4d09920",
+      "name": "Sticky Note3"
+    }
+  ],
+  "pinData": {
+    "Webhook": [
+      {
+        "json": {
+          "headers": {
+            "host": "primary-production-405d5.up.railway.app",
+            "user-agent": "curl/8.7.1",
+            "content-length": "103",
+            "accept": "*/*",
+            "backend_is_origin": "1",
+            "cdn-loop": "Fastly",
+            "content-type": "application/json",
+            "fastly-client-ip": "130.160.194.53",
+            "fastly-ssl": "1",
+            "x-edge-region": "US-East",
+            "x-forwarded-for": "130.160.194.53, 157.52.76.40",
+            "x-forwarded-host": "primary-production-405d5.up.railway.app",
+            "x-forwarded-proto": "https",
+            "x-forwarded-server": "cache-pdk-kfty8610040-PDK",
+            "x-railway-edge": "railway/us-east4-eqdc4a",
+            "x-railway-request-id": "pq7_TDluTxKSDBurPvyhXg",
+            "x-real-ip": "157.52.76.40",
+            "x-request-start": "1772313456331",
+            "x-timer": "S1772313456.323534,VS0",
+            "x-varnish": "1029266275",
+            "accept-encoding": "gzip"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "text": "Urgent: Avengers Compound is critically low on Arc Reactor Cores. The civilians are worried."
+          },
+          "webhookUrl": "https://primary-production-405d5.up.railway.app/webhook-test/dae8f665-69ea-4cd7-919f-969c3f16dfcf",
+          "executionMode": "test"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ],
+    "Jarvis Report": [
+      {
+        "json": {
+          "headers": {
+            "host": "primary-production-405d5.up.railway.app",
+            "user-agent": "node-fetch/1.0 (+https://github.com/bitinn/node-fetch)",
+            "content-length": "5686",
+            "accept": "*/*",
+            "accept-encoding": "gzip",
+            "backend_is_origin": "1",
+            "cdn-loop": "Fastly",
+            "content-type": "application/json",
+            "fastly-client-ip": "130.160.194.53",
+            "fastly-orig-accept-encoding": "gzip,deflate",
+            "fastly-ssl": "1",
+            "x-edge-region": "US-East",
+            "x-forwarded-for": "130.160.194.53, 157.52.76.55",
+            "x-forwarded-host": "primary-production-405d5.up.railway.app",
+            "x-forwarded-proto": "https",
+            "x-forwarded-server": "cache-pdk-kfty8610055-PDK",
+            "x-railway-edge": "railway/us-east4-eqdc4a",
+            "x-railway-request-id": "fEOTitoQSz2i8vvlCx5-qw",
+            "x-real-ip": "157.52.76.55",
+            "x-request-start": "1772353022258",
+            "x-timer": "S1772353022.247919,VS0",
+            "x-varnish": "4114284757"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "timestamp": "2026-03-01T08:17:02.159Z",
+            "resources": [
+              {
+                "location": "Avengers Compound",
+                "resource": "Arc Reactor Cores",
+                "depletionRate": -0.053275,
+                "latestStockLevel": 863.4767,
+                "latestTimestamp": "2026-01-17T21:00:00.000Z",
+                "projectedDepletionDate": "2027-11-24T04:54:55.917Z"
+              },
+              {
+                "location": "Avengers Compound",
+                "resource": "Clean Water (L)",
+                "depletionRate": -2.896727,
+                "latestStockLevel": 8091.3426,
+                "latestTimestamp": "2026-01-17T21:00:00.000Z",
+                "projectedDepletionDate": "2026-05-14T06:16:14.451Z"
+              },
+              {
+                "location": "Avengers Compound",
+                "resource": "Medical Kits",
+                "depletionRate": -1.879567,
+                "latestStockLevel": 397.7888,
+                "latestTimestamp": "2026-01-17T21:00:00.000Z",
+                "projectedDepletionDate": "2026-01-26T16:38:18.713Z"
+              },
+              {
+                "location": "Avengers Compound",
+                "resource": "Pym Particles",
+                "depletionRate": -1.074981,
+                "latestStockLevel": 946.1167,
+                "latestTimestamp": "2026-01-17T21:00:00.000Z",
+                "projectedDepletionDate": "2026-02-23T13:07:26.809Z"
+              },
+              {
+                "location": "Avengers Compound",
+                "resource": "Vibranium (kg)",
+                "depletionRate": -2.219837,
+                "latestStockLevel": 7370.4285,
+                "latestTimestamp": "2026-01-17T21:00:00.000Z",
+                "projectedDepletionDate": "2026-06-05T05:15:23.840Z"
+              },
+              {
+                "location": "New Asgard",
+                "resource": "Arc Reactor Cores",
+                "depletionRate": -0.636366,
+                "latestStockLevel": 444.9273,
+                "latestTimestamp": "2026-01-17T21:00:00.000Z",
+                "projectedDepletionDate": "2026-02-16T00:10:07.948Z"
+              },
+              {
+                "location": "New Asgard",
+                "resource": "Clean Water (L)",
+                "depletionRate": -3.655925,
+                "latestStockLevel": 2856.8541,
+                "latestTimestamp": "2026-01-17T21:00:00.000Z",
+                "projectedDepletionDate": "2026-02-19T10:25:52.556Z"
+              },
+              {
+                "location": "New Asgard",
+                "resource": "Medical Kits",
+                "depletionRate": -0.156848,
+                "latestStockLevel": 1200.4221,
+                "latestTimestamp": "2026-01-17T21:00:00.000Z",
+                "projectedDepletionDate": "2026-12-02T18:24:37.109Z"
+              },
+              {
+                "location": "New Asgard",
+                "resource": "Pym Particles",
+                "depletionRate": 0,
+                "latestStockLevel": 33.2307,
+                "latestTimestamp": "2026-01-17T21:00:00.000Z",
+                "projectedDepletionDate": null
+              },
+              {
+                "location": "New Asgard",
+                "resource": "Vibranium (kg)",
+                "depletionRate": -2.328344,
+                "latestStockLevel": 5570.4587,
+                "latestTimestamp": "2026-01-17T21:00:00.000Z",
+                "projectedDepletionDate": "2026-04-27T13:27:18.704Z"
+              },
+              {
+                "location": "Sanctum Sanctorum",
+                "resource": "Arc Reactor Cores",
+                "depletionRate": 0,
+                "latestStockLevel": 326.4338,
+                "latestTimestamp": "2026-01-17T21:00:00.000Z",
+                "projectedDepletionDate": null
+              },
+              {
+                "location": "Sanctum Sanctorum",
+                "resource": "Clean Water (L)",
+                "depletionRate": 0,
+                "latestStockLevel": 3598.2664,
+                "latestTimestamp": "2026-01-17T21:00:00.000Z",
+                "projectedDepletionDate": null
+              },
+              {
+                "location": "Sanctum Sanctorum",
+                "resource": "Medical Kits",
+                "depletionRate": 0,
+                "latestStockLevel": 523.6173,
+                "latestTimestamp": "2026-01-17T21:00:00.000Z",
+                "projectedDepletionDate": null
+              },
+              {
+                "location": "Sanctum Sanctorum",
+                "resource": "Pym Particles",
+                "depletionRate": 0,
+                "latestStockLevel": 104.4651,
+                "latestTimestamp": "2026-01-17T21:00:00.000Z",
+                "projectedDepletionDate": null
+              },
+              {
+                "location": "Sanctum Sanctorum",
+                "resource": "Vibranium (kg)",
+                "depletionRate": -2.193159,
+                "latestStockLevel": 1658.7366,
+                "latestTimestamp": "2026-01-17T21:00:00.000Z",
+                "projectedDepletionDate": "2026-02-18T09:19:22.809Z"
+              },
+              {
+                "location": "Sokovia",
+                "resource": "Arc Reactor Cores",
+                "depletionRate": 0,
+                "latestStockLevel": 50.4231,
+                "latestTimestamp": "2026-01-17T21:00:00.000Z",
+                "projectedDepletionDate": null
+              },
+              {
+                "location": "Sokovia",
+                "resource": "Clean Water (L)",
+                "depletionRate": 0,
+                "latestStockLevel": 540.9906,
+                "latestTimestamp": "2026-01-17T21:00:00.000Z",
+                "projectedDepletionDate": null
+              },
+              {
+                "location": "Sokovia",
+                "resource": "Medical Kits",
+                "depletionRate": 0,
+                "latestStockLevel": 32.8621,
+                "latestTimestamp": "2026-01-17T21:00:00.000Z",
+                "projectedDepletionDate": null
+              },
+              {
+                "location": "Sokovia",
+                "resource": "Pym Particles",
+                "depletionRate": 0,
+                "latestStockLevel": 82.5903,
+                "latestTimestamp": "2026-01-17T21:00:00.000Z",
+                "projectedDepletionDate": null
+              },
+              {
+                "location": "Sokovia",
+                "resource": "Vibranium (kg)",
+                "depletionRate": -2.092551,
+                "latestStockLevel": 1229.6729,
+                "latestTimestamp": "2026-01-17T21:00:00.000Z",
+                "projectedDepletionDate": "2026-02-11T08:38:34.718Z"
+              },
+              {
+                "location": "Wakanda",
+                "resource": "Arc Reactor Cores",
+                "depletionRate": -1.313923,
+                "latestStockLevel": 2986.3503,
+                "latestTimestamp": "2026-01-17T21:00:00.000Z",
+                "projectedDepletionDate": "2026-04-22T13:51:01.121Z"
+              },
+              {
+                "location": "Wakanda",
+                "resource": "Clean Water (L)",
+                "depletionRate": -3.11634,
+                "latestStockLevel": 2706.1721,
+                "latestTimestamp": "2026-01-17T21:00:00.000Z",
+                "projectedDepletionDate": "2026-02-23T01:22:53.511Z"
+              },
+              {
+                "location": "Wakanda",
+                "resource": "Medical Kits",
+                "depletionRate": -1.623516,
+                "latestStockLevel": 767.8413,
+                "latestTimestamp": "2026-01-17T21:00:00.000Z",
+                "projectedDepletionDate": "2026-02-06T13:56:58.686Z"
+              },
+              {
+                "location": "Wakanda",
+                "resource": "Pym Particles",
+                "depletionRate": -1.403909,
+                "latestStockLevel": 1570.6151,
+                "latestTimestamp": "2026-01-17T21:00:00.000Z",
+                "projectedDepletionDate": "2026-03-05T11:44:39.245Z"
+              },
+              {
+                "location": "Wakanda",
+                "resource": "Vibranium (kg)",
+                "depletionRate": -2.548915,
+                "latestStockLevel": 6057.7495,
+                "latestTimestamp": "2026-01-17T21:00:00.000Z",
+                "projectedDepletionDate": "2026-04-26T21:35:57.332Z"
+              }
+            ],
+            "heroes": [
+              {
+                "anonymousId": "286014a3-332c-41c7-81f5-79d0a4bf962c",
+                "is_active": false,
+                "active_resource": null,
+                "active_location": null
+              },
+              {
+                "anonymousId": "6a015d6d-573b-41a9-bd22-bfff51543e35",
+                "is_active": false,
+                "active_resource": null,
+                "active_location": null
+              },
+              {
+                "anonymousId": "c0f9aea0-7b0f-4d89-9f27-a4bfae06bc0a",
+                "is_active": false,
+                "active_resource": null,
+                "active_location": null
+              },
+              {
+                "anonymousId": "8187d66d-875f-4000-bf63-ffff8b7d46e4",
+                "is_active": false,
+                "active_resource": null,
+                "active_location": null
+              },
+              {
+                "anonymousId": "cae772e2-5f26-408f-a4fd-b19cb448ddbe",
+                "is_active": false,
+                "active_resource": null,
+                "active_location": null
+              },
+              {
+                "anonymousId": "fdcda94d-cda5-4340-bf90-90bfd5cc4b91",
+                "is_active": false,
+                "active_resource": null,
+                "active_location": null
+              }
+            ]
+          },
+          "webhookUrl": "https://primary-production-405d5.up.railway.app/webhook-test/fc603698-f5be-41bf-be8b-1d5aa9cc8957",
+          "executionMode": "test"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ],
+    "AI Agent1": [
+      {
+        "json": {
+          "output": {
+            "instructions": "You should deploy 286014a3-332c-41c7-81f5-79d0a4bf962c to Avengers Compound to stabilize Medical Kits for 1 hours.\nYou should deploy 6a015d6d-573b-41a9-bd22-bfff51543e35 to New Asgard to stabilize Arc Reactor Cores for 1 hours.\nYou should deploy c0f9aea0-7b0f-4d89-9f27-a4bfae06bc0a to Sokovia to stabilize Vibranium (kg) for 1 hours.\nYou should deploy 8187d66d-875f-4000-bf63-ffff8b7d46e4 to Sanctum Sanctorum to stabilize Vibranium (kg) for 1 hours.\nYou should deploy cae772e2-5f26-408f-a4fd-b19cb448ddbe to Wakanda to stabilize Medical Kits for 1 hours.\nYou should deploy fdcda94d-cda5-4340-bf90-90bfd5cc4b91 to Avengers Compound to stabilize Pym Particles for 1 hours."
+          }
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook1": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request1": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [],
+        [
+          {
+            "node": "HTTP Request2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request2": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Jarvis Report": {
+      "main": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser1": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent1": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger1": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "e005d07e-c882-41ae-bb02-d26c326a7ca4",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "bd1471417cfd8646c2a52a2fcbd205f14b2f911dc7b2adb4c4c8eb7bf837cb27"
+  },
+  "id": "CVTy1iUDGnNbYPDZ",
+  "tags": []
+}

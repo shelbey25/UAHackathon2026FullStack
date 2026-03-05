@@ -1,0 +1,95 @@
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  VIEWER
+  ADMIN
+}
+
+enum Priority {
+  AVENGERS_LEVEL_THREAT
+  HIGH
+  ROUTINE
+}
+
+model User {
+  id    String @id
+  email String @unique
+  phone String
+  name  String
+  role  Role   @default(VIEWER)
+
+  @@map("users")
+}
+
+model InventoryRecord {
+  id                  Int      @id @default(autoincrement())
+  sector_id           String
+  resource_type       String
+  timestamp           DateTime
+  stock_level         Float
+  usage_rate_hourly   Float    @default(0) @map("usage_rate")
+  snap_event_detected Boolean  @default(false)
+  restock_amount      Float    @default(0.0)
+  restock_reason      String   @default("")
+
+  @@index([sector_id, resource_type])
+  @@map("inventory_records")
+}
+
+model RawReport {
+  id              Int              @id @default(autoincrement())
+  report_id       String           @unique
+  heroAlias       String?          @map("hero_alias")
+  secure_contact  String?
+  receivedAt      DateTime         @map("timestamp")
+  rawText         String           @map("raw_text")
+  priority        Priority         @default(ROUTINE)
+  ProcessedReport ProcessedReport?
+
+  @@map("raw_reports")
+}
+
+model ProcessedReport {
+  id             Int      @id @default(autoincrement())
+  reportId       Int      @unique @map("report_id")
+  redactedText   String   @map("redacted_text")
+  timestamp      DateTime
+  resource_name  String
+  resource_level String   @default("")
+  location       String
+  priority       Priority
+
+  cleared     Boolean   @default(false)
+  processedAt DateTime  @default(now()) @map("processed_at")
+  report      RawReport @relation(fields: [reportId], references: [id], onDelete: Cascade)
+
+  @@map("report_summaries")
+}
+
+model Resource {
+  id            Int      @id @default(autoincrement())
+  location      String
+  resource      String
+  depletionRate Float    @default(0.0)
+  lastUpdated   DateTime @default(now())
+
+  @@unique([location, resource])
+}
+
+model Hero {
+  id                    Int      @id @default(autoincrement())
+  hero_name             String   @unique
+  is_active             Boolean  @default(false)
+  active_resource       String   @default("")
+  active_location       String   @default("")
+  assignment_start_time DateTime @default(now())
+  assignment_end_time   DateTime @default(now())
+}

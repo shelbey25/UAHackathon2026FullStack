@@ -1,0 +1,232 @@
+[
+    {
+        "report_id": "a691a8b2-a957-492a-ae62-1b80016d6432",
+        "metadata": {
+            "hero_alias": "Tony Stark",
+            "secure_contact": "555-0101 (Iron Line)"
+        },
+        "raw_text": "Urgent: Avengers Compound is critically low on Arc Reactor Cores. The civilians are worried.",
+        "timestamp": "2026-01-15T21:41:48.828165",
+        "priority": "Routine"
+    },
+    {
+        "report_id": "5abfa4c0-7017-484d-a833-e9abe8637726",
+        "metadata": {
+            "hero_alias": "Natasha Romanoff",
+            "secure_contact": "555-0199 (Black Widow Comms)"
+        },
+        "raw_text": "Heavy combat in Sanctum Sanctorum. Pym Particles supply chain is compromised. Need backup.",
+        "timestamp": "2026-01-16T08:35:48.828249",
+        "priority": "Avengers Level Threat"
+    },
+    {
+        "report_id": "8bc7bc93-cccc-46ee-b043-782df6c6d276",
+        "metadata": {
+            "hero_alias": "Thor Odinson",
+            "secure_contact": "555-GOD-OF-THUNDER"
+        },
+        "raw_text": "The situation in Avengers Compound is dire. We need more Clean Water (L) or we lose the perimeter.",
+        "timestamp": "2026-01-15T20:30:48.828303",
+        "priority": "Routine"
+    },
+    {
+        "report_id": "dc2e1068-1284-4999-95c1-7bb9be961fe2",
+        "metadata": {
+            "hero_alias": "Peter Parker",
+            "secure_contact": "555-0123 (Spider-Sense)"
+        },
+        "raw_text": "Urgent: Avengers Compound is critically low on Medical Kits. The civilians are worried.",
+        "timestamp": "2026-01-16T01:38:48.828570",
+        "priority": "Avengers Level Threat"
+    },
+    {
+        "report_id": "70f94524-35c3-4697-af4b-dd0156407fe4",
+        "metadata": {
+            "hero_alias": "Natasha Romanoff",
+            "secure_contact": "555-0199 (Black Widow Comms)"
+        },
+        "raw_text": "Urgent: Wakanda is critically low on Vibranium (kg). The civilians are worried.",
+        "timestamp": "2026-01-16T06:58:48.828669",
+        "priority": "Avengers Level Threat"
+    },
+    {
+        "report_id": "03d111aa-8ed1-4aa1-9264-0ae4abae8575",
+        "metadata": {
+            "hero_alias": "Thor Odinson",
+            "secure_contact": "555-GOD-OF-THUNDER"
+        },
+        "raw_text": "Just a heads up, Sokovia is out of Vibranium (kg). This is Thor Odinson, call me back at 555-GOD-OF-THUNDER.",
+        "timestamp": "2026-01-16T02:21:48.828718",
+        "priority": "High"
+    },
+    {
+        "report_id": "97edcc21-8dbc-461a-b0d0-f52af1cd9f85",
+        "metadata": {
+            "hero_alias": "Bruce Banner",
+            "secure_contact": "555-HULK-SMASH"
+        },
+        "raw_text": "Heavy combat in Sanctum Sanctorum. Pym Particles supply chain is compromised. Need backup.",
+        "timestamp": "2026-01-15T18:08:48.828764",
+        "priority": "Routine"
+    },
+    {
+        "report_id": "d09ec49c-83d8-4d20-b7b3-555a86bbe9e8",
+        "metadata": {
+            "hero_alias": "Thor Odinson",
+            "secure_contact": "555-GOD-OF-THUNDER"
+        },
+        "raw_text": "Heavy combat in Avengers Compound. Medical Kits supply chain is compromised. Need backup.",
+        "timestamp": "2026-01-15T20:31:48.828807",
+        "priority": "High"
+    },
+    {
+        "report_id": "52f93b2c-d2c5-42d4-b977-a3af4cc79f6f",
+        "metadata": {
+            "hero_alias": "Thor Odinson",
+            "secure_contact": "555-GOD-OF-THUNDER"
+        },
+        "raw_text": "Heavy combat in Avengers Compound. Clean Water (L) supply chain is compromised. Need backup.",
+        "timestamp": "2026-01-15T17:36:48.828863",
+        "priority": "Avengers Level Threat"
+    },
+    {
+        "report_id": "a6d3d367-a743-4f6d-a276-09ebef398532",
+        "metadata": {
+            "hero_alias": "Thor Odinson",
+            "secure_contact": "555-GOD-OF-THUNDER"
+        },
+        "raw_text": "The situation in Sokovia is dire. We need more Arc Reactor Cores or we lose the perimeter.",
+        "timestamp": "2026-01-16T05:26:48.828908",
+        "priority": "Avengers Level Threat"
+    },
+    {
+        "report_id": "ee8540c7-5460-4809-b223-9e69dcf921fe",
+        "metadata": {
+            "hero_alias": "Bruce Banner",
+            "secure_contact": "555-HULK-SMASH"
+        },
+        "raw_text": "Status update from Sanctum Sanctorum. We secured a cache of Arc Reactor Cores. Sending coordinates now.",
+        "timestamp": "2026-01-15T21:05:48.828953",
+        "priority": "High"
+    },
+    {
+        "report_id": "b6bc0e94-3232-4818-9de8-1dfc918cc65f",
+        "metadata": {
+            "hero_alias": "Bruce Banner",
+            "secure_contact": "555-HULK-SMASH"
+        },
+        "raw_text": "Urgent: Sanctum Sanctorum is critically low on Pym Particles. The civilians are worried.",
+        "timestamp": "2026-01-15T22:24:48.828998",
+        "priority": "High"
+    },
+    {
+        "report_id": "9d266b2f-a34f-4894-808e-58526ec03852",
+        "metadata": {
+            "hero_alias": "Thor Odinson",
+            "secure_contact": "555-GOD-OF-THUNDER"
+        },
+        "raw_text": "Urgent: New Asgard is critically low on Clean Water (L). The civilians are worried.",
+        "timestamp": "2026-01-15T22:19:48.829043",
+        "priority": "Routine"
+    },
+    {
+        "report_id": "5a1d7f22-54cf-45e6-b6f0-925e26d82d90",
+        "metadata": {
+            "hero_alias": "Natasha Romanoff",
+            "secure_contact": "555-0199 (Black Widow Comms)"
+        },
+        "raw_text": "Just a heads up, Avengers Compound is out of Pym Particles. This is Natasha Romanoff, call me back at 555-0199 (Black Widow Comms).",
+        "timestamp": "2026-01-16T01:01:48.829090",
+        "priority": "High"
+    },
+    {
+        "report_id": "fd2d3241-3cce-4d25-99f4-7118b24f971c",
+        "metadata": {
+            "hero_alias": "Bruce Banner",
+            "secure_contact": "555-HULK-SMASH"
+        },
+        "raw_text": "Heavy combat in Sokovia. Vibranium (kg) supply chain is compromised. Need backup.",
+        "timestamp": "2026-01-16T08:16:48.829134",
+        "priority": "Avengers Level Threat"
+    },
+    {
+        "report_id": "c5d079a5-15a7-4ae9-9545-9b9c93134fba",
+        "metadata": {
+            "hero_alias": "Steve Rogers",
+            "secure_contact": "555-1941 (Shield Freq)"
+        },
+        "raw_text": "Urgent: New Asgard is critically low on Pym Particles. The civilians are worried.",
+        "timestamp": "2026-01-16T02:18:48.829178",
+        "priority": "Routine"
+    },
+    {
+        "report_id": "4a14c58d-89d6-4d7a-906f-bf070ef4b6d8",
+        "metadata": {
+            "hero_alias": "Thor Odinson",
+            "secure_contact": "555-GOD-OF-THUNDER"
+        },
+        "raw_text": "Urgent: Sanctum Sanctorum is critically low on Clean Water (L). The civilians are worried.",
+        "timestamp": "2026-01-16T06:12:48.829221",
+        "priority": "Avengers Level Threat"
+    },
+    {
+        "report_id": "81725b97-94f3-4237-ada2-c01a2b3da868",
+        "metadata": {
+            "hero_alias": "Thor Odinson",
+            "secure_contact": "555-GOD-OF-THUNDER"
+        },
+        "raw_text": "Just a heads up, Sanctum Sanctorum is out of Clean Water (L). This is Thor Odinson, call me back at 555-GOD-OF-THUNDER.",
+        "timestamp": "2026-01-15T20:35:48.829265",
+        "priority": "High"
+    },
+    {
+        "report_id": "af600588-84e8-4a78-8f6d-01d90eae85bc",
+        "metadata": {
+            "hero_alias": "Peter Parker",
+            "secure_contact": "555-0123 (Spider-Sense)"
+        },
+        "raw_text": "Status update from Wakanda. We secured a cache of Clean Water (L). Sending coordinates now.",
+        "timestamp": "2026-01-16T07:43:48.829309",
+        "priority": "High"
+    },
+    {
+        "report_id": "26e78ffe-ceda-4fbe-a8ac-1e890c20730f",
+        "metadata": {
+            "hero_alias": "Thor Odinson",
+            "secure_contact": "555-GOD-OF-THUNDER"
+        },
+        "raw_text": "Just a heads up, New Asgard is out of Clean Water (L). This is Thor Odinson, call me back at 555-GOD-OF-THUNDER.",
+        "timestamp": "2026-01-15T16:28:48.829353",
+        "priority": "High"
+    },
+    {
+        "report_id": "491a31ca-914c-4f8a-b82b-0d54ccf8efdf",
+        "metadata": {
+            "hero_alias": "Bruce Banner",
+            "secure_contact": "555-HULK-SMASH"
+        },
+        "raw_text": "Status update from New Asgard. We secured a cache of Vibranium (kg). Sending coordinates now.",
+        "timestamp": "2026-01-16T06:25:48.829396",
+        "priority": "Routine"
+    },
+    {
+        "report_id": "5d2226e2-0c26-4628-95af-60cfde36e754",
+        "metadata": {
+            "hero_alias": "Thor Odinson",
+            "secure_contact": "555-GOD-OF-THUNDER"
+        },
+        "raw_text": "Heavy combat in New Asgard. Pym Particles supply chain is compromised. Need backup.",
+        "timestamp": "2026-01-15T22:43:48.829440",
+        "priority": "Avengers Level Threat"
+    },
+    {
+        "report_id": "9218cb02-edd9-46ec-b1e3-dd0c74764933",
+        "metadata": {
+            "hero_alias": "Peter Parker",
+            "secure_contact": "555-0123 (Spider-Sense)"
+        },
+        "raw_text": "Urgent: Sanctum Sanctorum is critically low on Arc Reactor Cores. The civilians are worried.",
+        "timestamp": "2026-01-15T20:57:48.829484",
+        "priority": "High"
+    }
+]
